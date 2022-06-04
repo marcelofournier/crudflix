@@ -20,25 +20,28 @@ class PessoaFormList extends TPage
         
         
         $this->form = new BootstrapFormBuilder('form_Pessoa');
-        $this->form->setFormTitle('Cadastro de Ator | Diretor');
+        $this->form->setFormTitle('Pessoa');
         
 
         // create the form fields
         $id = new TEntry('id');
         $nome = new TEntry('nome');
-        //$nacionalidade = new TDBCombo('nacionalidade', 'crudflix', 'Pais', 'id', 'paisDescricao');
-        $nacionalidade = new TDBCombo('nacionalidade', 'crudflix', 'Pais', 'id', 'paisDescricao');
+        $pais_id = new TDBCombo('pais_id', 'crudflix', 'Pais', 'id', 'paisDescricao');
 
 
         // add the fields
         $this->form->addFields( [ new TLabel('Id') ], [ $id ] );
         $this->form->addFields( [ new TLabel('Nome') ], [ $nome ] );
-        $this->form->addFields( [ new TLabel('Nacionalidade') ], [ $nacionalidade ] );
+        $this->form->addFields( [ new TLabel('Pais') ], [ $pais_id ] );
+
+
 
         // set sizes
-        $id->setSize('5%');
-        $nome->setSize('40%');
-        $nacionalidade->setSize('30%');
+        $id->setSize('100%');
+        $nome->setSize('100%');
+        $pais_id->setSize('100%');
+
+
 
         if (!empty($id))
         {
@@ -65,13 +68,13 @@ class PessoaFormList extends TPage
         // creates the datagrid columns
         $column_id = new TDataGridColumn('id', 'Id', 'left');
         $column_nome = new TDataGridColumn('nome', 'Nome', 'left');
-        //$column_nacionalidade = new TDataGridColumn('nacionalidade', 'Nacionalidade', 'left');
-        $column_nacionalidade = new TDataGridColumn('{Pais->paisDescricao}', 'Nacionalidade', 'left');
+        $column_pais_id = new TDataGridColumn('pais_id', 'Pais', 'left');
+
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_nome);
-        $this->datagrid->addColumn($column_nacionalidade);
+        $this->datagrid->addColumn($column_pais_id);
 
         
         // creates two datagrid actions

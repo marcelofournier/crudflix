@@ -10,7 +10,6 @@ class Pessoa extends TRecord
     const IDPOLICY =  'max'; // {max, serial}
     
     
-    private $filme;
     private $pais;
 
     /**
@@ -23,33 +22,6 @@ class Pessoa extends TRecord
         parent::addAttribute('pais_id');
     }
 
-    
-    /**
-     * Method set_filme
-     * Sample of usage: $pessoa->filme = $object;
-     * @param $object Instance of Filme
-     */
-    public function set_filme(Filme $object)
-    {
-        $this->filme = $object;
-        $this->filme_id = $object->id;
-    }
-    
-    /**
-     * Method get_filme
-     * Sample of usage: $pessoa->filme->attribute;
-     * @returns Filme instance
-     */
-    public function get_filme()
-    {
-        // loads the associated object
-        if (empty($this->filme))
-            $this->filme = new Filme($this->filme_id);
-    
-        // returns the associated object
-        return $this->filme;
-    }
-    
     
     /**
      * Method set_pais
