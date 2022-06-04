@@ -58,8 +58,8 @@ class PessoaList extends TPage
         // creates the datagrid columns
         $column_id = new TDataGridColumn('id', 'Id', 'left');
         $column_nome = new TDataGridColumn('nome', 'Nome', 'left');
-        $column_pais_id = new TDataGridColumn('pais_id', 'Pais', 'left');
-
+        //$column_pais_id = new TDataGridColumn('pais_id', 'Pais', 'left');
+        $column_pais_id = new TDataGridColumn('{Pais->paisDescricao', 'Pais', 'left');
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($column_id);

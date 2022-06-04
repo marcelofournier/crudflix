@@ -1,9 +1,9 @@
 <?php
 /**
- * FilmeList Listing
+ * PaisList Listing
  * @author  <your name here>
  */
-class FilmeList extends TPage
+class PaisList extends TPage
 {
     private $form; // form
     private $datagrid; // listing
@@ -21,44 +21,23 @@ class FilmeList extends TPage
         parent::__construct();
         
         // creates the form
-        $this->form = new BootstrapFormBuilder('form_search_Filme');
-        $this->form->setFormTitle('Filme');
+        $this->form = new BootstrapFormBuilder('form_search_Pais');
+        $this->form->setFormTitle('Pais');
         
 
         // create the form fields
         $id = new TEntry('id');
-        $titulo = new TEntry('titulo');
-        $ano = new TEntry('ano');
-        $genero_id = new TDBCombo('genero_id', 'crudflix', 'Genero', 'id', 'generoDescricao');
-        $pessoa_id = new TDBCombo('pessoa_id', 'crudflix', 'Pessoa', 'id', 'nome');
-        $sinopse = new TEntry('sinopse');
-        $avaliacao = new TEntry('avaliacao');
-        $poster = new TEntry('poster');
-        $pais = new TDBCombo('pais', 'crudflix', 'Pais', 'id', 'paisDescricao');
+        $paisDescricao = new TEntry('paisDescricao');
 
 
         // add the fields
         $this->form->addFields( [ new TLabel('Id') ], [ $id ] );
-        $this->form->addFields( [ new TLabel('Titulo') ], [ $titulo ] );
-        $this->form->addFields( [ new TLabel('Ano') ], [ $ano ] );
-        $this->form->addFields( [ new TLabel('Genero') ], [ $genero_id ] );
-        $this->form->addFields( [ new TLabel('Pessoa') ], [ $pessoa_id ] );
-        //$this->form->addFields( [ new TLabel('Sinopse') ], [ $sinopse ] );
-        $this->form->addFields( [ new TLabel('Avaliacao') ], [ $avaliacao ] );
-        //$this->form->addFields( [ new TLabel('Poster') ], [ $poster ] );
-        $this->form->addFields( [ new TLabel('Pais') ], [ $pais ] );
+        $this->form->addFields( [ new TLabel('Pais') ], [ $paisDescricao ] );
 
 
         // set sizes
         $id->setSize('100%');
-        $titulo->setSize('100%');
-        $ano->setSize('100%');
-        $genero_id->setSize('100%');
-        $pessoa_id->setSize('100%');
-        $sinopse->setSize('100%');
-        $avaliacao->setSize('100%');
-        $poster->setSize('100%');
-        $pais->setSize('100%');
+        $paisDescricao->setSize('100%');
 
         
         // keep the form filled during navigation with session data
@@ -67,7 +46,7 @@ class FilmeList extends TPage
         // add the search form actions
         $btn = $this->form->addAction(_t('Find'), new TAction([$this, 'onSearch']), 'fa:search');
         $btn->class = 'btn btn-sm btn-primary';
-        $this->form->addActionLink(_t('New'), new TAction(['FilmeForm', 'onEdit']), 'fa:plus green');
+        $this->form->addActionLink(_t('New'), new TAction(['PaisForm', 'onEdit']), 'fa:plus green');
         
         // creates a Datagrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
@@ -78,56 +57,26 @@ class FilmeList extends TPage
 
         // creates the datagrid columns
         $column_id = new TDataGridColumn('id', 'Id', 'left');
-        $column_titulo = new TDataGridColumn('titulo', 'Titulo', 'left');
-        $column_ano = new TDataGridColumn('ano', 'Ano', 'left');
-        $column_genero_id = new TDataGridColumn('{Genero->generoDescricao', 'Genero', '');
-        $column_pessoa_id = new TDataGridColumn('pessoa_id', 'Pessoa', 'left');
-        $column_sinopse = new TDataGridColumn('sinopse', 'Sinopse', 'left');
-        $column_avaliacao = new TDataGridColumn('avaliacao', 'Avaliacao', 'left');
-        $column_poster = new TDataGridColumn('poster', 'Poster', 'left');
-        $column_pais = new TDataGridColumn('pais', 'Pais', '');
+        $column_paisDescricao = new TDataGridColumn('paisDescricao', 'Paisd', 'left');
 
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_titulo);
-        $this->datagrid->addColumn($column_ano);
-        $this->datagrid->addColumn($column_genero_id);
-        $this->datagrid->addColumn($column_pessoa_id);
-        $this->datagrid->addColumn($column_sinopse);
-        $this->datagrid->addColumn($column_avaliacao);
-        $this->datagrid->addColumn($column_poster);
-        $this->datagrid->addColumn($column_pais);
-
-        // define the transformer method over image
-        $column_avaliacao->setTransformer( function($value, $object, $row) {
-            $bar = new TProgressBar;
-            $bar->setMask('<b>{value}</b>%');
-            $bar->setValue($value);
-            
-            if ($value == 100) {
-                $bar->setClass('success');
-            }
-            else if ($value >= 75) {
-                $bar->setClass('info');
-            }
-            else if ($value >= 50) {
-                $bar->setClass('warning');
-            }
-            else {
-                $bar->setClass('danger');
-            }
-            return $bar;
-        });
-        // define the transformer method over image
-        $column_poster->setTransformer( function($value, $object, $row) {
-            if (file_exists($value)) {
-                return new TImage($value);
-            }
-        });
+        $this->datagrid->addColumn($column_paisDescricao);
 
 
-        $action1 = new TDataGridAction(['FilmeForm', 'onEdit'], ['id'=>'{id}']);
+        // creates the datagrid column actions
+        $column_paisDescricao->setAction(new TAction([$this, 'onReload']), ['order' => 'paisDescricao']);
+
+
+        // inline editing
+        $paisDescricao_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $paisDescricao_edit->setField('id');
+        $column_paisDescricao->setEditAction($paisDescricao_edit);
+        
+
+
+        $action1 = new TDataGridAction(['PaisForm', 'onEdit'], ['id'=>'{id}']);
         $action2 = new TDataGridAction([$this, 'onDelete'], ['id'=>'{id}']);
         
         $this->datagrid->addAction($action1, _t('Edit'),   'far:edit blue');
@@ -168,7 +117,7 @@ class FilmeList extends TPage
             $value = $param['value'];
             
             TTransaction::open('crudflix'); // open a transaction with database
-            $object = new Filme($key); // instantiates the Active Record
+            $object = new Pais($key); // instantiates the Active Record
             $object->{$field} = $value;
             $object->store(); // update the object in the database
             TTransaction::close(); // close the transaction
@@ -193,14 +142,7 @@ class FilmeList extends TPage
         
         // clear session filters
         TSession::setValue(__CLASS__.'_filter_id',   NULL);
-        TSession::setValue(__CLASS__.'_filter_titulo',   NULL);
-        TSession::setValue(__CLASS__.'_filter_ano',   NULL);
-        TSession::setValue(__CLASS__.'_filter_genero_id',   NULL);
-        TSession::setValue(__CLASS__.'_filter_pessoa_id',   NULL);
-        TSession::setValue(__CLASS__.'_filter_sinopse',   NULL);
-        TSession::setValue(__CLASS__.'_filter_avaliacao',   NULL);
-        TSession::setValue(__CLASS__.'_filter_poster',   NULL);
-        TSession::setValue(__CLASS__.'_filter_pais',   NULL);
+        TSession::setValue(__CLASS__.'_filter_paisDescricao',   NULL);
 
         if (isset($data->id) AND ($data->id)) {
             $filter = new TFilter('id', '=', $data->id); // create the filter
@@ -208,51 +150,9 @@ class FilmeList extends TPage
         }
 
 
-        if (isset($data->titulo) AND ($data->titulo)) {
-            $filter = new TFilter('titulo', 'like', "%{$data->titulo}%"); // create the filter
-            TSession::setValue(__CLASS__.'_filter_titulo',   $filter); // stores the filter in the session
-        }
-
-
-        if (isset($data->ano) AND ($data->ano)) {
-            $filter = new TFilter('ano', 'like', "%{$data->ano}%"); // create the filter
-            TSession::setValue(__CLASS__.'_filter_ano',   $filter); // stores the filter in the session
-        }
-
-
-        if (isset($data->genero_id) AND ($data->genero_id)) {
-            $filter = new TFilter('genero_id', '=', $data->genero_id); // create the filter
-            TSession::setValue(__CLASS__.'_filter_genero_id',   $filter); // stores the filter in the session
-        }
-
-
-        if (isset($data->pessoa_id) AND ($data->pessoa_id)) {
-            $filter = new TFilter('pessoa_id', '=', $data->pessoa_id); // create the filter
-            TSession::setValue(__CLASS__.'_filter_pessoa_id',   $filter); // stores the filter in the session
-        }
-
-
-        if (isset($data->sinopse) AND ($data->sinopse)) {
-            $filter = new TFilter('sinopse', 'like', "%{$data->sinopse}%"); // create the filter
-            TSession::setValue(__CLASS__.'_filter_sinopse',   $filter); // stores the filter in the session
-        }
-
-
-        if (isset($data->avaliacao) AND ($data->avaliacao)) {
-            $filter = new TFilter('avaliacao', 'like', "%{$data->avaliacao}%"); // create the filter
-            TSession::setValue(__CLASS__.'_filter_avaliacao',   $filter); // stores the filter in the session
-        }
-
-
-        if (isset($data->poster) AND ($data->poster)) {
-            $filter = new TFilter('poster', 'like', "%{$data->poster}%"); // create the filter
-            TSession::setValue(__CLASS__.'_filter_poster',   $filter); // stores the filter in the session
-        }
-
-
-        if (isset($data->pais) AND ($data->pais)) {
-            $filter = new TFilter('pais', '=', $data->pais); // create the filter
-            TSession::setValue(__CLASS__.'_filter_pais',   $filter); // stores the filter in the session
+        if (isset($data->paisDescricao) AND ($data->paisDescricao)) {
+            $filter = new TFilter('paisDescricao', 'like', "%{$data->paisDescricao}%"); // create the filter
+            TSession::setValue(__CLASS__.'_filter_paisDescricao',   $filter); // stores the filter in the session
         }
 
         
@@ -278,8 +178,8 @@ class FilmeList extends TPage
             // open a transaction with database 'crudflix'
             TTransaction::open('crudflix');
             
-            // creates a repository for Filme
-            $repository = new TRepository('Filme');
+            // creates a repository for Pais
+            $repository = new TRepository('Pais');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;
@@ -299,43 +199,8 @@ class FilmeList extends TPage
             }
 
 
-            if (TSession::getValue(__CLASS__.'_filter_titulo')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_titulo')); // add the session filter
-            }
-
-
-            if (TSession::getValue(__CLASS__.'_filter_ano')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_ano')); // add the session filter
-            }
-
-
-            if (TSession::getValue(__CLASS__.'_filter_genero_id')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_genero_id')); // add the session filter
-            }
-
-
-            if (TSession::getValue(__CLASS__.'_filter_pessoa_id')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_pessoa_id')); // add the session filter
-            }
-
-
-            if (TSession::getValue(__CLASS__.'_filter_sinopse')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_sinopse')); // add the session filter
-            }
-
-
-            if (TSession::getValue(__CLASS__.'_filter_avaliacao')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_avaliacao')); // add the session filter
-            }
-
-
-            if (TSession::getValue(__CLASS__.'_filter_poster')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_poster')); // add the session filter
-            }
-
-
-            if (TSession::getValue(__CLASS__.'_filter_pais')) {
-                $criteria->add(TSession::getValue(__CLASS__.'_filter_pais')); // add the session filter
+            if (TSession::getValue(__CLASS__.'_filter_paisDescricao')) {
+                $criteria->add(TSession::getValue(__CLASS__.'_filter_paisDescricao')); // add the session filter
             }
 
             
@@ -399,7 +264,7 @@ class FilmeList extends TPage
         {
             $key=$param['key']; // get the parameter $key
             TTransaction::open('crudflix'); // open a transaction with database
-            $object = new Filme($key, FALSE); // instantiates the Active Record
+            $object = new Pais($key, FALSE); // instantiates the Active Record
             $object->delete(); // deletes the object from the database
             TTransaction::close(); // close the transaction
             

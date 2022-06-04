@@ -4,7 +4,7 @@
     <icon>fas:home fa-fw</icon>
     <menu>
       <menuitem label="Gêneros de filmes">
-        <action>GeneroFormList</action>
+        <action>GeneroList</action>
         <icon>fas:address-card fa-fw</icon>
       </menuitem>
       <menuitem label="Países de origem">

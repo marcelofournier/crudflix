@@ -36,9 +36,9 @@ class PessoaForm extends TPage
 
 
         // set sizes
-        $id->setSize('100%');
-        $nome->setSize('100%');
-        $pais_id->setSize('100%');
+        $id->setSize('5%');
+        $nome->setSize('40%');
+        $pais_id->setSize('30%');
 
 
 

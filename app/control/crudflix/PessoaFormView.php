@@ -13,14 +13,13 @@ class PessoaFormView extends TPage
     {
         parent::__construct();
         
-        parent::setTargetContainer('adianti_right_panel');
-
+        
         $this->form = new BootstrapFormBuilder('form_Pessoa_View');
         
         $this->form->setFormTitle('Pessoa');
         $this->form->setColumnClasses(2, ['col-sm-3', 'col-sm-9']);
-        $this->form->addHeaderActionLink( _t('Print'), new TAction([$this, 'onPrint'], ['key'=>$param['key'], 'static' => '1']), 'far:file-pdf red');
-        $this->form->addHeaderActionLink( _t('Edit'), new TAction(['PessoaForm', 'onEdit'], ['key'=>$param['key'], 'register_state'=>'true']), 'far:edit blue');
+        //$this->form->addHeaderActionLink( _t('Print'), new TAction([$this, 'onPrint'], ['key'=>$param['key'], 'static' => '1']), 'far:file-pdf red');
+        //$this->form->addHeaderActionLink( _t('Edit'), new TAction(['PessoaForm', 'onEdit'], ['key'=>$param['key'], 'register_state'=>'true']), 'far:edit blue');
         
         // vertical box container
         $container = new TVBox;
@@ -43,15 +42,15 @@ class PessoaFormView extends TPage
             
             $label_id = new TLabel('Id:', '#333333', '', 'B');
             $label_nome = new TLabel('Nome:', '#333333', '', 'B');
-            $label_nacionalidade = new TLabel('Nacionalidade:', '#333333', '', 'B');
+            //$label_pais_id = new TLabel('Pais:', '#333333', '', 'B');
 
             $text_id  = new TTextDisplay($object->id, '#333333', '', '');
             $text_nome  = new TTextDisplay($object->nome, '#333333', '', '');
-            $text_nacionalidade  = new TTextDisplay($object->nacionalidade, '#333333', '', '');
+            //$text_pais_id  = new TTextDisplay($object->pais_id, '#333333', '', '');
 
             $this->form->addFields([$label_id],[$text_id]);
             $this->form->addFields([$label_nome],[$text_nome]);
-            $this->form->addFields([$label_nacionalidade],[$text_nacionalidade]);
+            //$this->form->addFields([$label_pais_id],[$text_pais_id]);
 
             TTransaction::close();
         }

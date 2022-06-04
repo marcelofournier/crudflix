@@ -18,8 +18,8 @@ class FilmeFormView extends TPage
         
         $this->form->setFormTitle('Filme');
         $this->form->setColumnClasses(2, ['col-sm-3', 'col-sm-9']);
-        $this->form->addHeaderActionLink( _t('Print'), new TAction([$this, 'onPrint'], ['key'=>$param['key'], 'static' => '1']), 'far:file-pdf red');
-        $this->form->addHeaderActionLink( _t('Edit'), new TAction(['FilmeForm', 'onEdit'], ['key'=>$param['key'], 'register_state'=>'true']), 'far:edit blue');
+        //$this->form->addHeaderActionLink( _t('Print'), new TAction([$this, 'onPrint'], ['key'=>$param['key'], 'static' => '1']), 'far:file-pdf red');
+        //$this->form->addHeaderActionLink( _t('Edit'), new TAction(['FilmeForm', 'onEdit'], ['key'=>$param['key'], 'register_state'=>'true']), 'far:edit blue');
         
         // vertical box container
         $container = new TVBox;

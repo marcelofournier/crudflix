@@ -1,9 +1,9 @@
 <?php
 /**
- * GeneroForm Form
+ * FilmePessoaForm Form
  * @author  <your name here>
  */
-class GeneroForm extends TPage
+class FilmePessoaForm extends TPage
 {
     protected $form; // form
     
@@ -17,25 +17,28 @@ class GeneroForm extends TPage
         
         
         // creates the form
-        $this->form = new BootstrapFormBuilder('form_Genero');
-        $this->form->setFormTitle('Genero');
+        $this->form = new BootstrapFormBuilder('form_FilmePessoa');
+        $this->form->setFormTitle('FilmePessoa');
         
 
         // create the form fields
         $id = new TEntry('id');
-        $descricao = new TEntry('descricao');
+        $filme_id = new TDBCombo('filme_id', 'crudflix', 'Filme', 'id', 'titulo');
+        $pessoa_id = new TDBCombo('pessoa_id', 'crudflix', 'Pessoa', 'id', 'nome');
 
 
         // add the fields
         $this->form->addFields( [ new TLabel('Id') ], [ $id ] );
-        $this->form->addFields( [ new TLabel('Descricao') ], [ $descricao ] );
+        $this->form->addFields( [ new TLabel('Filme') ], [ $filme_id ] );
+        $this->form->addFields( [ new TLabel('Pessoa Id') ], [ $pessoa_id ] );
 
-        $descricao->addValidation('Descricao', new TRequiredValidator);
+        $pessoa_id->addValidation('Pessoa Id', new TRequiredValidator);
 
 
         // set sizes
         $id->setSize('100%');
-        $descricao->setSize('100%');
+        $filme_id->setSize('100%');
+        $pessoa_id->setSize('100%');
 
 
 
@@ -82,7 +85,7 @@ class GeneroForm extends TPage
             $this->form->validate(); // validate form data
             $data = $this->form->getData(); // get form data as array
             
-            $object = new Genero;  // create an empty object
+            $object = new FilmePessoa;  // create an empty object
             $object->fromArray( (array) $data); // load the object with data
             $object->store(); // save the object
             
@@ -93,9 +96,6 @@ class GeneroForm extends TPage
             TTransaction::close(); // close the transaction
             
             new TMessage('info', AdiantiCoreTranslator::translate('Record saved'));
-            
-            TApplication::loadPage( 'GeneroList', 'onEdit', ['key' => $param['id']] );
-
         }
         catch (Exception $e) // in case of exception
         {
@@ -126,7 +126,7 @@ class GeneroForm extends TPage
             {
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('crudflix'); // open a transaction
-                $object = new Genero($key); // instantiates the Active Record
+                $object = new FilmePessoa($key); // instantiates the Active Record
                 $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }
