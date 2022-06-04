@@ -1,9 +1,9 @@
 <?php
 /**
- * FilmeList Listing
+ * FilmeListTeste Listing
  * @author  <your name here>
  */
-class FilmeList extends TPage
+class FilmeListTeste extends TPage
 {
     protected $form;     // registration form
     protected $datagrid; // listing
@@ -28,10 +28,12 @@ class FilmeList extends TPage
 
         $this->addFilterField('id', '=', 'id'); // filterField, operator, formField
         $this->addFilterField('titulo', 'like', 'titulo'); // filterField, operator, formField
-        $this->addFilterField('ano', '>=', 'ano'); // filterField, operator, formField
+        $this->addFilterField('ano', 'like', 'ano'); // filterField, operator, formField
         $this->addFilterField('genero_id', '=', 'genero_id'); // filterField, operator, formField
         $this->addFilterField('pessoa_id', '=', 'pessoa_id'); // filterField, operator, formField
-        $this->addFilterField('avaliacao', '>=', 'avaliacao'); // filterField, operator, formField
+        $this->addFilterField('sinopse', 'like', 'sinopse'); // filterField, operator, formField
+        $this->addFilterField('avaliacao', 'like', 'avaliacao'); // filterField, operator, formField
+        $this->addFilterField('poster', 'like', 'poster'); // filterField, operator, formField
         $this->addFilterField('pais_id', '=', 'pais_id'); // filterField, operator, formField
         
         // creates the form
@@ -43,20 +45,24 @@ class FilmeList extends TPage
         $id = new TEntry('id');
         $titulo = new TEntry('titulo');
         $ano = new TEntry('ano');
-        $genero_id = new TDBCombo('genero_id', 'crudflix', 'Genero', 'id', 'descricao');
-        $pessoa_id = new TDBCombo('pessoa_id', 'crudflix', 'Pessoa', 'id', 'nome');
+        $genero_id = new TDBUniqueSearch('genero_id', 'crudflix', 'Genero', 'id', 'descricao');
+        $pessoa_id = new TDBUniqueSearch('pessoa_id', 'crudflix', 'Pessoa', 'id', 'nome');
+        $sinopse = new TEntry('sinopse');
         $avaliacao = new TEntry('avaliacao');
-        $pais_id = new TDBCombo('pais_id', 'crudflix', 'Pais', 'id', 'paisDescricao');
+        $poster = new TEntry('poster');
+        $pais_id = new TDBUniqueSearch('pais_id', 'crudflix', 'Pais', 'id', 'paisDescricao');
 
 
         // add the fields
         $this->form->addFields( [ new TLabel('Id') ], [ $id ] );
         $this->form->addFields( [ new TLabel('Titulo') ], [ $titulo ] );
         $this->form->addFields( [ new TLabel('Ano') ], [ $ano ] );
-        $this->form->addFields( [ new TLabel('Genero') ], [ $genero_id ] );
-        $this->form->addFields( [ new TLabel('Diretor') ], [ $pessoa_id ] );
+        $this->form->addFields( [ new TLabel('Genero Id') ], [ $genero_id ] );
+        $this->form->addFields( [ new TLabel('Pessoa Id') ], [ $pessoa_id ] );
+        $this->form->addFields( [ new TLabel('Sinopse') ], [ $sinopse ] );
         $this->form->addFields( [ new TLabel('Avaliacao') ], [ $avaliacao ] );
-        $this->form->addFields( [ new TLabel('Pais') ], [ $pais_id ] );
+        $this->form->addFields( [ new TLabel('Poster') ], [ $poster ] );
+        $this->form->addFields( [ new TLabel('Pais Id') ], [ $pais_id ] );
 
 
         // set sizes
@@ -65,7 +71,9 @@ class FilmeList extends TPage
         $ano->setSize('100%');
         $genero_id->setSize('100%');
         $pessoa_id->setSize('100%');
+        $sinopse->setSize('100%');
         $avaliacao->setSize('100%');
+        $poster->setSize('100%');
         $pais_id->setSize('100%');
 
         
@@ -88,11 +96,13 @@ class FilmeList extends TPage
         $column_id = new TDataGridColumn('id', 'Id', 'left');
         $column_titulo = new TDataGridColumn('titulo', 'Titulo', 'left');
         $column_ano = new TDataGridColumn('ano', 'Ano', 'left');
-        $column_genero_id = new TDataGridColumn('genero_id', 'Genero', 'left');
-        $column_pessoa_id = new TDataGridColumn('pessoa_id', 'Diretor', 'left');
+        $column_genero_id = new TDataGridColumn('genero_id', 'Genero Id', 'left');
+        $column_pessoa_id = new TDataGridColumn('pessoa_id', 'Pessoa Id', 'left');
+        $column_sinopse = new TDataGridColumn('sinopse', 'Sinopse', 'left');
         $column_avaliacao = new TDataGridColumn('avaliacao', 'Avaliacao', 'left');
-        $column_poster = new TDataGridColumn('poster', 'Capa', 'left');
-        $column_pais_id = new TDataGridColumn('pais_id', 'Pais', 'left');
+        $column_poster = new TDataGridColumn('poster', 'Poster', 'left');       
+        
+        $column_pais_id = new TDataGridColumn('pais_id', 'Pais Id', 'left');
 
 
         // add the columns to the DataGrid
@@ -101,16 +111,10 @@ class FilmeList extends TPage
         $this->datagrid->addColumn($column_ano);
         $this->datagrid->addColumn($column_genero_id);
         $this->datagrid->addColumn($column_pessoa_id);
+        $this->datagrid->addColumn($column_sinopse);
         $this->datagrid->addColumn($column_avaliacao);
         $this->datagrid->addColumn($column_poster);
         $this->datagrid->addColumn($column_pais_id);
-
-
-        // creates the datagrid column actions
-        $column_genero_id->setAction(new TAction([$this, 'onReload']), ['order' => 'genero_id']);
-        $column_pessoa_id->setAction(new TAction([$this, 'onReload']), ['order' => 'pessoa_id']);
-        $column_avaliacao->setAction(new TAction([$this, 'onReload']), ['order' => 'avaliacao']);
-        $column_pais_id->setAction(new TAction([$this, 'onReload']), ['order' => 'pais_id']);
 
         // define the transformer method over image
         $column_avaliacao->setTransformer( function($value, $object, $row) {

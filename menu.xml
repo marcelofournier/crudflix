@@ -16,7 +16,7 @@
         <icon>fas:adjust fa-fw</icon>
       </menuitem>
       <menuitem label="Cadastro de filme">
-        <action>FilmeForm</action>
+        <action>FilmeFormList</action>
         <icon>fas:ad fa-fw</icon>
       </menuitem>
     </menu>

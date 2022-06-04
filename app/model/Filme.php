@@ -11,8 +11,8 @@ class Filme extends TRecord
     
     
     private $genero;
-    private $pessoa;
     private $pais;
+    private $pessoa;
 
     /**
      * Constructor method
@@ -59,33 +59,6 @@ class Filme extends TRecord
     
     
     /**
-     * Method set_pessoa
-     * Sample of usage: $filme->pessoa = $object;
-     * @param $object Instance of Pessoa
-     */
-    public function set_pessoa(Pessoa $object)
-    {
-        $this->pessoa = $object;
-        $this->pessoa_id = $object->id;
-    }
-    
-    /**
-     * Method get_pessoa
-     * Sample of usage: $filme->pessoa->attribute;
-     * @returns Pessoa instance
-     */
-    public function get_pessoa()
-    {
-        // loads the associated object
-        if (empty($this->pessoa))
-            $this->pessoa = new Pessoa($this->pessoa_id);
-    
-        // returns the associated object
-        return $this->pessoa;
-    }
-    
-    
-    /**
      * Method set_pais
      * Sample of usage: $filme->pais = $object;
      * @param $object Instance of Pais
@@ -109,6 +82,33 @@ class Filme extends TRecord
     
         // returns the associated object
         return $this->pais;
+    }
+    
+    
+    /**
+     * Method set_pessoa
+     * Sample of usage: $filme->pessoa = $object;
+     * @param $object Instance of Pessoa
+     */
+    public function set_pessoa(Pessoa $object)
+    {
+        $this->pessoa = $object;
+        $this->pessoa_id = $object->id;
+    }
+    
+    /**
+     * Method get_pessoa
+     * Sample of usage: $filme->pessoa->attribute;
+     * @returns Pessoa instance
+     */
+    public function get_pessoa()
+    {
+        // loads the associated object
+        if (empty($this->pessoa))
+            $this->pessoa = new Pessoa($this->pessoa_id);
+    
+        // returns the associated object
+        return $this->pessoa;
     }
     
 

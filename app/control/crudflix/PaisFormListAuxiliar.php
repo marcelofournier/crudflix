@@ -1,9 +1,9 @@
 <?php
 /**
- * FilmeFormList Form List
+ * PaisFormListAuxiliar Form List
  * @author  <your name here>
  */
-class FilmeFormList extends TPage
+class PaisFormListAuxiliar extends TPage
 {
     protected $form; // form
     protected $datagrid; // datagrid
@@ -18,51 +18,27 @@ class FilmeFormList extends TPage
     {
         parent::__construct();
         
-        
-        $this->form = new BootstrapFormBuilder('form_Filme');
-        $this->form->setFormTitle('Filme');
+        parent::setTargetContainer('adianti_right_panel');
+
+        $this->form = new BootstrapFormBuilder('form_Pais');
+        $this->form->setFormTitle('Pais');
         
 
         // create the form fields
         $id = new TEntry('id');
-        $titulo = new TEntry('titulo');
-        $ano = new TEntry('ano');
-        $genero_id = new TDBCombo('genero_id', 'crudflix', 'Genero', 'id', 'descricao');
-        $pessoa_id = new TDBCombo('pessoa_id', 'crudflix', 'Pessoa', 'id', 'nome');
-        $sinopse = new TText('sinopse');
-        $avaliacao = new TEntry('avaliacao');
-        $poster = new TFile('poster');
-        $pais_id = new TDBCombo('pais_id', 'crudflix', 'Pais', 'id', 'paisDescricao');
+        $paisDescricao = new TEntry('paisDescricao');
 
 
         // add the fields
-        //$this->form->addFields( [ new TLabel('Id') ], [ $id ] );
-        $this->form->addFields( [ new TLabel('Titulo') ], [ $titulo ] );
-        $this->form->addFields( [ new TLabel('Ano') ], [ $ano ] );
-        $this->form->addFields( [ new TLabel('Genero') ], [ $genero_id ] );
-        $this->form->addFields( [ new TLabel('Diretor') ], [ $pessoa_id ] );
-        $this->form->addFields( [ new TLabel('Sinopse') ], [ $sinopse ] );
-        $this->form->addFields( [ new TLabel('Avaliacao') ], [ $avaliacao ] );
-        $this->form->addFields( [ new TLabel('Poster') ], [ $poster ] );
-        $this->form->addFields( [ new TLabel('Pais') ], [ $pais_id ] );
+        $this->form->addFields( [ new TLabel('Id') ], [ $id ] );
+        $this->form->addFields( [ new TLabel('Pais') ], [ $paisDescricao ] );
 
-        $titulo->addValidation('Titulo', new TRequiredValidator);
-        $ano->addValidation('Ano', new TRequiredValidator);
-        $genero_id->addValidation('Genero', new TRequiredValidator);
-        $pessoa_id->addValidation('Pessoa', new TRequiredValidator);
-        $pais_id->addValidation('Pais', new TRequiredValidator);
+        $paisDescricao->addValidation('Pais', new TRequiredValidator);
 
 
         // set sizes
-        $id->setSize('10%');
-        $titulo->setSize('50%');
-        $ano->setSize('10%');
-        $genero_id->setSize('40%');
-        $pessoa_id->setSize('50%');
-        $sinopse->setSize('80%');
-        $avaliacao->setSize('10%');
-        $poster->setSize('40%');
-        $pais_id->setSize('30%');
+        $id->setSize('100%');
+        $paisDescricao->setSize('100%');
 
 
 
@@ -90,61 +66,12 @@ class FilmeFormList extends TPage
 
         // creates the datagrid columns
         $column_id = new TDataGridColumn('id', 'Id', 'left');
-        $column_titulo = new TDataGridColumn('titulo', 'Titulo', 'left');
-        $column_ano = new TDataGridColumn('ano', 'Ano', 'left');
-        $column_genero_id = new TDataGridColumn('{Genero->descricao}', 'Genero', 'left');
-        $column_pessoa_id = new TDataGridColumn('{Pessoa->nome}', 'Diretor', 'left');
-        $column_sinopse = new TDataGridColumn('sinopse', 'Sinopse', 'left');
-        $column_avaliacao = new TDataGridColumn('avaliacao', 'Avaliacao', 'left');
-        $column_poster = new TDataGridColumn('poster', 'Capa', 'left');
-
-        // define the transformer method over image
-        $column_avaliacao->setTransformer( function($value, $object, $row) {
-            $bar = new TProgressBar;
-            $bar->setMask('<b>{value}</b>%');
-            $bar->setValue($value);
-            
-            if ($value >= 85) {
-                $bar->setClass('success');
-            }
-            else if ($value >= 75) {
-                $bar->setClass('info');
-            }
-            else if ($value >= 50) {
-                $bar->setClass('warning');
-            }
-            else {
-                $bar->setClass('danger');
-            }
-            return $bar;
-        });
-
-
-        
-        // define the transformer method over image
-        $column_poster->setTransformer( function($image) {
-            $image = new TImage($image);
-            $image->style = 'max-width: 140px';
-            return $image;
-        });
-        
-        
-        
-        $column_pais_id = new TDataGridColumn('{Pais->paisDescricao}', 'Pais', 'left');
+        $column_paisDescricao = new TDataGridColumn('paisDescricao', 'Pais', 'left');
 
 
         // add the columns to the DataGrid
-        //$this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_poster);
-        $this->datagrid->addColumn($column_titulo);
-        $this->datagrid->addColumn($column_ano);
-        $this->datagrid->addColumn($column_genero_id);
-        $this->datagrid->addColumn($column_pessoa_id);
-        //$this->datagrid->addColumn($column_sinopse);
-        $this->datagrid->addColumn($column_pais_id);
-        $this->datagrid->addColumn($column_avaliacao);      
-
-
+        $this->datagrid->addColumn($column_id);
+        $this->datagrid->addColumn($column_paisDescricao);
 
         
         // creates two datagrid actions
@@ -194,8 +121,8 @@ class FilmeFormList extends TPage
             // open a transaction with database 'crudflix'
             TTransaction::open('crudflix');
             
-            // creates a repository for Filme
-            $repository = new TRepository('Filme');
+            // creates a repository for Pais
+            $repository = new TRepository('Pais');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;
@@ -267,7 +194,7 @@ class FilmeFormList extends TPage
         {
             $key = $param['key']; // get the parameter $key
             TTransaction::open('crudflix'); // open a transaction with database
-            $object = new Filme($key, FALSE); // instantiates the Active Record
+            $object = new Pais($key, FALSE); // instantiates the Active Record
             $object->delete(); // deletes the object from the database
             TTransaction::close(); // close the transaction
             
@@ -300,7 +227,7 @@ class FilmeFormList extends TPage
             $this->form->validate(); // validate form data
             $data = $this->form->getData(); // get form data as array
             
-            $object = new Filme;  // create an empty object
+            $object = new Pais;  // create an empty object
             $object->fromArray( (array) $data); // load the object with data
             $object->store(); // save the object
             
@@ -342,7 +269,7 @@ class FilmeFormList extends TPage
             {
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('crudflix'); // open a transaction
-                $object = new Filme($key); // instantiates the Active Record
+                $object = new Pais($key); // instantiates the Active Record
                 $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }

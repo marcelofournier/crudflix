@@ -30,8 +30,7 @@ class PublicoFilmeList extends TPage
         $this->addFilterField('genero_id', '=', 'genero_id'); // filterField, operator, formField
         $this->addFilterField('pessoa_id', '=', 'pessoa_id'); // filterField, operator, formField
         $this->addFilterField('avaliacao', '>=', 'avaliacao'); // filterField, operator, formField
-        $this->addFilterField('pais_id', '=', 'pais_id'); // filterField, operator, formField
-
+        $this->addFilterField('pais_id', '=', 'pais_id'); // filterField, operator, formField       
         
         $this->form = new TForm('form_search_Filme');
         
@@ -42,7 +41,7 @@ class PublicoFilmeList extends TPage
         $pessoa_id = new TDBCombo('pessoa_id', 'crudflix', 'Pessoa', 'id', 'nome');
         $avaliacao = new TEntry('avaliacao');
         $pais_id = new TDBCombo('pais_id', 'crudflix', 'Pais', 'id', 'paisDescricao');
-
+        
         $id->exitOnEnter();
         $titulo->exitOnEnter();
         $ano->exitOnEnter();
@@ -76,15 +75,20 @@ class PublicoFilmeList extends TPage
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->style = 'width: 100%';
-        $this->datagrid->enablePopover('Popover', '<b> {Pais->paisDescricao} </b>');
+        //$this->datagrid->enablePopover('Popover', '<b> {Pais->paisDescricao} </b>');
+        $this->datagrid->enablePopover('Capa do Filme',"<img style='max-height: 240px'  src='/app/images/capa1.jpg'>");
+        
+        //$this->datagrid->enablePopover('Popover', '<b> {Pais->paisDescricao} </b>');        
+        
+        
         
         
         // creates the datagrid columns
         $column_id = new TDataGridColumn('id', 'Id', 'left');
         $column_titulo = new TDataGridColumn('titulo', 'Titulo', 'left');
         $column_ano = new TDataGridColumn('ano', 'Ano', 'left');
-        $column_genero_id = new TDataGridColumn('{Genero->generoDescricao}', 'Genero', 'left');
-        $column_pessoa_id = new TDataGridColumn('pessoa_id', 'Diretor', 'left');
+        $column_genero_id = new TDataGridColumn('{Genero->descricao}', 'Genero', 'left');
+        $column_pessoa_id = new TDataGridColumn('{Pessoa->nome}', 'Diretor', 'left');
         $column_sinopse = new TDataGridColumn('sinopse', 'Sinopse', 'left');
         $column_avaliacao = new TDataGridColumn('avaliacao', 'Avaliacao', 'left');
         $column_poster = new TDataGridColumn('poster', 'Poster', 'left');  
@@ -133,6 +137,10 @@ class PublicoFilmeList extends TPage
         // define the transformer method over image
         $column_poster->setTransformer( function($value, $object, $row) {
             if (file_exists($value)) {
+            
+                //$text_photo_path = new TImage('download.php?file='.object->column_poster);
+                              
+            
               return new TImage($value);
             }
         });
